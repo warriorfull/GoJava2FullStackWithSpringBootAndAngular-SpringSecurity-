@@ -12,31 +12,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TodoResource {
+	
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private Logger logger = LoggerFactory.getLogger(TodoResource.class);
-	
-	private static final List<Todo> TODOS_LIST =  
-		List.of(
-			new Todo("in28minutes", "Learn AWS"),
-			new Todo("in28minutes", "Get AWS Certified")
-		);
-	
+	private static final List<Todo> TODOS_LIST = 
+			List.of(new Todo("in28minutes", "Learn AWS"),
+					new Todo("in28minutes", "Get AWS Certified"));
+
 	@GetMapping("/todos")
 	public List<Todo> retrieveAllTodos() {
 		return TODOS_LIST;
 	}
-	
-	@GetMapping("/user/{username}/todos")
+
+	@GetMapping("/users/{username}/todos")
 	public Todo retrieveTodosForSpecificUser(@PathVariable String username) {
-		
 		return TODOS_LIST.get(0);
 	}
-	
-	@PostMapping("/user/{username}/todos")
-	public void createTodo(@PathVariable String username, @RequestBody Todo todo) {
+
+	@PostMapping("/users/{username}/todos")
+	public void createTodoForSpecificUser(@PathVariable String username
+			, @RequestBody Todo todo) {
 		logger.info("Create {} for {}", todo, username);
 	}
-	
+
 }
 
-record Todo(String username, String description) {}
+record Todo (String username, String description) {}

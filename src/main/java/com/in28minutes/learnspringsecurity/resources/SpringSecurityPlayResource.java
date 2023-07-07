@@ -1,13 +1,17 @@
 package com.in28minutes.learnspringsecurity.resources;
 
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 public class SpringSecurityPlayResource {
-
-	@GetMapping("/hello-world")
-	public String helloWorld() {
-		return "Hello - Christ is Lord and King - given all authority in Heaven and Earth";
+	
+	@GetMapping("/csrf-token")
+	public CsrfToken retrieveCsrfToken(HttpServletRequest request) {
+		return (CsrfToken) request.getAttribute("_csrf");
 	}
+
 }
