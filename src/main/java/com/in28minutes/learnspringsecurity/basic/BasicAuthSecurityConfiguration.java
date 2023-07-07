@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,19 +33,29 @@ public class BasicAuthSecurityConfiguration {
 		return http.build();
 	}
 	
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-					.allowedMethods("*")
-					.allowedOrigins("https://localhost:3000");
-			}
-		};
-	}
-	
 //	@Bean
-//	public UserDetailsService userDetailService() {
-//		return new InMemoryUserDetailsManager();
+//	public WebMvcConfigurer corsConfigurer() {
+//		return new WebMvcConfigurer() {
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry.addMapping("/**")
+//					.allowedMethods("*")
+//					.allowedOrigins("https://localhost:3000");
+//			}
+//		};
 //	}
+	
+	@Bean
+	public UserDetailsService userDetailService() {
+		var user = User.withUsername("in28minutes")
+			.password("{noop}doggie")
+			.roles("USER")
+			.build();
+		
+		var admin = User.withUsername("admin")
+			.password("{noop}doggie")
+			.roles("ADMIN")
+			.build();
+		
+		return new InMemoryUserDetailsManager(user, admin);
+	}
 }
